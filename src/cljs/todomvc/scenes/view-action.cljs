@@ -1,4 +1,4 @@
-(ns todomvc.scenes.add-action
+(ns todomvc.scenes.view-action
   (:require [re-frame.core :as re-frame]
             [cljsjs.material-ui]
             [cljsjs.material-ui-chip-input]
@@ -47,7 +47,7 @@
                  :fullWidth true
                  :style {:margin 10}}]))
 
-(defn add-action-panel
+(defn view-action-panel
   []
   (let [add-action (re-frame/subscribe [:ui.add-action/add-action [:db/ident :ui.add-action/add-action]])
         all-tags (re-frame/subscribe [:ui.add-action/all-tags])]

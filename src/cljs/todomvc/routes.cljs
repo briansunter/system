@@ -11,18 +11,15 @@
 (def action-routes
   {"" :actions
    "/" {"" :actions
-        [:action-id "/actions"] :deck-cards
         "add" :add-action
-        true :not-found
-        }
+        [:action-id ""] :view-action
+        [:action-id "/"] :view-action
+        true :not-found}
    true :not-found})
 
 (def routes
   ["/" {"" :home
         "feed"  :feed
-        "cards" {"" :cards
-                 "/add" :add-card
-                 true :not-found}
         "actions" action-routes
         true :not-found}
    true :not-found])

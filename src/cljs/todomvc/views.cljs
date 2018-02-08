@@ -7,12 +7,15 @@
             [cljs-react-material-ui.icons :as ic]
             [reagent.core :as r]
             [todomvc.scenes.add-action :refer [add-action-panel]]
+            [todomvc.scenes.view-action :refer [view-action-panel]]
             [todomvc.routes :refer [path-for-page]]))
 
 (defn task-list-item [id]
   (let [task (re-frame/subscribe [:task id])]
     (fn []
-      [ui/list-item {:class-name "task-list-item"}
+      [ui/list-item {:class-name "task-list-item"
+                     :href (path-for-page :view-action :action-id id)
+                     }
        [:input {:type "checkbox"
                 :checked (:task/done? @task)
                 :on-change #(re-frame/dispatch [:task/set-status (:db/id @task) (not (:task/done? @task))])}]
@@ -50,6 +53,7 @@
   (case panel-name
     :actions [home-page]
     :add-action [add-action-panel]
+    :view-action [view-action-panel]
     [:div [:a "not found"]]))
 
 (defn main-panel []
