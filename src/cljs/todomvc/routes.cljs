@@ -18,10 +18,12 @@
    true :not-found})
 
 (def routes
-  ["/" {"" :home
+  [
+   "/" {"" :actions
         "feed"  :feed
         "actions" action-routes
         true :not-found}
+   "" :actions
    true :not-found])
 
 (def path-for-page
