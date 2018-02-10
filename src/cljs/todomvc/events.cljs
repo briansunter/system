@@ -10,8 +10,10 @@
 
 (re-posh/reg-event-ds
  :nav/set-current-page
- (fn [_ [_ page]]
-   [[:db/add [:db/ident :nav/current-page] :nav/page page]]))
+ (fn [_ [_ page params]]
+   [(merge {:db/ident :nav/current-page
+            :nav/page page}
+           (when params {:nav/route-params params}))]))
 
 (re-posh/reg-event-ds
  :ui.add-action/update-name

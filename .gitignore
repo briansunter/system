@@ -1,2 +1,4 @@
 resources/public/js/compiled/*
 /target/classes/ring/util/io__init.class
+/figwheel_server.log
+/target/classes/ring/util/io$fn__158.class

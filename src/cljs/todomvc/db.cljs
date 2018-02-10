@@ -8,10 +8,19 @@
              :tags/tag {:db/unique :db.unique/identity}
              :ui.add-action/tag {:db/unique :db.unique/identity}
 
+             :nav/route-params {:db/ident :nav/route-params
+                                  :db/isComponent true
+                                  :db/valueType :db.type/ref
+                                  :db/cardinality :db.cardinality/one}
+
              :ui.add-action/tags {:db/ident :ui.add-action/tags
                                   :db/isComponent true
                                   :db/valueType :db.type/ref
                                   :db/cardinality :db.cardinality/many}
+
+             :action-id          {:db/ident :action-id
+                                  :db/valueType :db.type/ref
+                                  :db/cardinality :db.cardinality/one}
 
              :action/tags {:db/ident :action/tags
                            :db/valueType :db.type/ref
@@ -24,10 +33,6 @@
                   :ui.add-action/tags [{:ui.add-action/tag :foo}
                                        {:ui.add-action/tag :bar}]}
                  {:tags/tag :fee}
-                 { :db/id                        -1
-                  :app/type                     :type/create-todo-form
-                  :create-todo-form/title        ""
-                  :create-todo-form/description  "" }
                  { :db/id            -2
                   :app/type         :type/task
                   :action/name "Learn Clojure a little bit"
@@ -95,7 +100,23 @@
 ;;    ])
 
 (d/q
- '[:find [?n ...]
-   :where [_ :tags/tag ?n] ] @conn)
+ '[:find [(pull ?c [*])]
+   :where
+   [?a :db/ident :nav/current-page]
+   [?a :nav/route-params ?b]
+   [?b :action-id ?c]
+   ]  @conn)
+
+(defn parse-int
+  [s]
+  (js/parseInt s))
+
+(d/q
+ '[:find ?e
+   :where
+   [_ :action-id ?e]
+   ]  @conn)
+
+(d/pull @conn '[*] 10)
 
 ;; (d/pull @conn '[:ui.add-action/action-name] [:db/ident :ui.add-action/action-name])

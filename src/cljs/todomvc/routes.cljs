@@ -29,12 +29,17 @@
 (def path-for-page
   (partial bidi/path-for routes))
 
+(defn parse-route-params
+  [params]
+  (update params :action-id js/parseInt))
+
 (defn set-page!
   [match]
   (let [current-page (:handler match)
         route-params (:route-params match)
-        query-params (:query-params match)]
-    (re-frame/dispatch [:nav/set-current-page current-page])))
+        query-params (:query-params match)
+        parsed-route-params (parse-route-params route-params)]
+    (re-frame/dispatch [:nav/set-current-page current-page parsed-route-params])))
 
 (defn app-routes []
   (accountant/configure-navigation!

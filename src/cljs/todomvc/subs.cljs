@@ -44,3 +44,11 @@
  :ui.nav.drawer/app-drawer-open
  '[:find ?n .
    :where [:db/ident :ui.nav.drawer/app-drawer-open] [_ :ui.nav.drawer/app-drawer-open ?n]])
+
+(re-posh/reg-query-sub
+ :nav/current-action
+ '[:find [(pull ?c [*])]
+   :where
+   [?a :db/ident :nav/current-page]
+   [?a :nav/route-params ?b]
+   [?b :action-id ?c]])
