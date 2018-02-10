@@ -1,1 +1,0 @@
-{"version":3,"file":"\/Users\/bsunter\/gdrive\/code\/clojurescript\/re-posh\/examples\/todomvc\/resources\/public\/js\/compiled\/out\/devtools\/version.js","sources":["version.cljs?rel=1517206665953"],"lineCount":9,"mappings":";AAAA;;AAGA,AAAKA,mCAAgB;AAErB,uCAAA,vCAAMC;AAAN,AACED","names":["devtools.version\/current-version","devtools.version\/get-current-version"]}
