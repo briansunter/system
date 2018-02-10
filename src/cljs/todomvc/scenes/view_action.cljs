@@ -20,7 +20,7 @@
 
 (defn add-action-app-bar
   []
-  [nav/main-app-bar #::nav{:title "Add Action"
+  [nav/main-app-bar #::nav{:title "View Action"
                            :left-element [nav/app-bar-close-button {:href (path-for-page :actions)}]
                            :right-element [add-action-button]}])
 
@@ -50,14 +50,16 @@
 (defn view-action-panel
   []
   (let [add-action (re-frame/subscribe [:ui.add-action/add-action [:db/ident :ui.add-action/add-action]])
-        all-tags (re-frame/subscribe [:ui.add-action/all-tags])]
+        all-tags (re-frame/subscribe [:ui.add-action/all-tags])
+        current-action-id (re-frame/subscribe [:ui.view-action/current-action-id])
+        current-action (re-frame/subscribe [:ui.view-action/current-action @current-action-id])]
     [:div
     [add-action-app-bar]
     [ui/paper {:z-depth 2
                :style {:padding 10
                        :overflow "hidden"}}
      [ui/text-field {:floating-label-text "Action Name"
-                     :value (:ui.add-action/action-name @add-action)
+                     :value (:action/name @current-action)
                      :on-change #(re-frame/dispatch [:ui.add-action/update-name (target-value %)])
                      :style {:padding 10
                              :font-size 26
@@ -70,7 +72,7 @@
                      :rows 3
                      :style {:padding 10
                              :width "100%"}}]
-     [action-tags-input {:tags (map :ui.add-action/tag (:ui.add-action/tags @add-action))
+     [action-tags-input {:tags (map :tags/tag (:action/tags @current-action))
                         :matching-tags @all-tags
                        ;; :on-input-update #(re-frame/dispatch [:search-for-tag %])
                          :on-add-chip #(re-frame/dispatch [:ui.add-action/add-tag (keyword %)])

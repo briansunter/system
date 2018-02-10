@@ -1,6 +1,7 @@
 (ns todomvc.subs
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :as re-frame]
+            [datascript.core    :as d]
             [re-posh.core :as re-posh]))
 
 (re-posh/reg-query-sub
@@ -46,9 +47,13 @@
    :where [:db/ident :ui.nav.drawer/app-drawer-open] [_ :ui.nav.drawer/app-drawer-open ?n]])
 
 (re-posh/reg-query-sub
- :nav/current-action
- '[:find [(pull ?c [*])]
+ :ui.view-action/current-action-id
+ '[:find ?c .
    :where
    [?a :db/ident :nav/current-page]
    [?a :nav/route-params ?b]
    [?b :action-id ?c]])
+
+(re-posh/reg-pull-sub
+ :ui.view-action/current-action
+ '[:action/name {:action/tags [:tags/tag]}])

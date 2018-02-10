@@ -37,7 +37,7 @@
                   :app/type         :type/task
                   :action/name "Learn Clojure a little bit"
                   :task/description "Just learn it"
-                  :action/tags [{:tags/tag :foo :app/type :type/tag} {:tags/tag :bar}]
+                  :action/tags [{:tags/tag :foo} {:tags/tag :bar}]
                   :task/done?       false }
                  { :db/id            -3
                   :app/type         :type/task
@@ -101,6 +101,14 @@
 
 (d/q
  '[:find [(pull ?c [*])]
+   :where
+   [?a :db/ident :nav/current-page]
+   [?a :nav/route-params ?b]
+   [?b :action-id ?c]
+   ]  @conn)
+
+(d/q
+ '[:find ?n
    :where
    [?a :db/ident :nav/current-page]
    [?a :nav/route-params ?b]
