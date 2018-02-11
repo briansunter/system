@@ -2,6 +2,7 @@
   :dependencies [[org.clojure/clojure "1.9.0-alpha4"]
                  [org.clojure/clojurescript "1.9.908"]
                  [org.clojure/test.check "0.9.0"]
+                 [com.cognitect/transit-cljs "0.8.239"]
                  [cljsjs/react-dom "15.6.1-1"]
                  [cljsjs/material-ui-chip-input "0.11.2-0"]
                  [ring "1.4.0"]

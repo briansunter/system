@@ -33,7 +33,7 @@
 (re-posh/reg-event-ds
  :ui.add-action/add-action
  (fn [_ [_ name tags]]
-   [{:action/id -1
+   [{
      :action/name name
      :action/tags (map (fn [{:keys [tag]}] {:tags/tag tag}) tags)
      :app/type :type/task} ]))
@@ -41,8 +41,22 @@
 (re-posh/reg-event-ds
  :ui.add-action/save-action
  (fn [_ [_ name tags]]
-   [{:action/id -1
+   [{
      :action/name name
      :action/tags (map (fn [x] {:tags/tag (:ui.add-action/tag x)}) tags)
      :app/type :type/task}
     {:db/ident :ui.add-action/add-action :ui.add-action/action-name "" :ui.add-action/tags []}]))
+
+(re-posh/reg-event-ds
+ :ui.add-action/add-action
+ (fn [_ [_ name tags]]
+   [{
+     :action/name name
+     :action/tags (map (fn [{:keys [tag]}] {:tags/tag tag}) tags)
+     :app/type :type/task} ]))
+
+(re-posh/reg-event-ds
+ :action/update-name
+ (fn [_ [_ id name]]
+   [{:db/id id
+     :action/name name}]))

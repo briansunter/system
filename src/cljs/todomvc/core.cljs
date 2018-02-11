@@ -3,6 +3,8 @@
             [re-frame.core :as re-frame]
             [todomvc.events]
             [todomvc.subs]
+            [todomvc.db :as db]
+            [todomvc.dfs.sync :as sync]
             [todomvc.views :as views]
             [todomvc.routes :as routes]
             [todomvc.config :as config]))
@@ -21,8 +23,8 @@
 (defn ^:export init []
   (re-frame/dispatch-sync [:initialize-db])
   (dev-setup)
-
+  (enable-console-print!)
   (mount-root)
-
   (routes/app-routes)
+  (sync/datoms!)
   )

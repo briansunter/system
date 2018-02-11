@@ -13,13 +13,27 @@
 (defn task-list-item [id]
   (let [task (re-frame/subscribe [:task id])]
     (fn []
-      [ui/list-item {:class-name "task-list-item"
+
+      [:div
+       {:style
+        {:display :flex
+         :justify-content :space-between
+         :flex-direction :row}}
+       [ui/list-item {:class-name "task-list-item"
                      :href (path-for-page :view-action :action-id id)
                      }
-       [:input {:type "checkbox"
-                :checked (:task/done? @task)
-                :on-change #(re-frame/dispatch [:task/set-status (:db/id @task) (not (:task/done? @task))])}]
-       [:span (:action/name @task)]])))
+       ;; [:input {:type "checkbox"
+       ;;          :checked (:task/done? @task)
+       ;;          :on-change #(re-frame/dispatch [:task/set-status (:db/id @task) (not (:task/done? @task))])}]
+       [:span (:action/name @task)]
+
+        [ui/raised-button {:primary true
+                           :label "done"
+                           :style {:z-index 3}
+                           }]
+        ]
+
+       ])))
 
 (defn task-list []
   (let [task-ids (re-frame/subscribe [:task-ids])]

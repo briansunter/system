@@ -60,7 +60,7 @@
                        :overflow "hidden"}}
      [ui/text-field {:floating-label-text "Action Name"
                      :value (:action/name @current-action)
-                     :on-change #(re-frame/dispatch [:ui.add-action/update-name (target-value %)])
+                     :on-change #(re-frame/dispatch [:action/update-name @current-action-id (target-value %)])
                      :style {:padding 10
                              :font-size 26
                              :multi-line true
