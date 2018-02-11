@@ -18,6 +18,7 @@
                                   :db/cardinality :db.cardinality/many}
 
              :action-id          {:db/ident :action-id
+                                  :db/unique :db.unique/identity
                                   :db/valueType :db.type/ref
                                   :db/cardinality :db.cardinality/one}
 

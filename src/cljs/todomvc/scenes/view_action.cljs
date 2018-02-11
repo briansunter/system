@@ -11,17 +11,17 @@
 (defn add-action-button
   []
   (let [add-action (re-frame/subscribe [:ui.add-action/add-action [:db/ident :ui.add-action/add-action]])]
-    [ui/flat-button {:label "save"
-                     :on-click #(re-frame/dispatch [:ui.add-action/save-action (:ui.add-action/action-name @add-action) (:ui.add-action/tags @add-action) ])
-                     :href (path-for-page :actions)
-                     :disabled (clojure.string/blank? (:ui.add-action/action-name @add-action))
-                     :style {:color "white"
-                             :margin-top 5}}]))
+    [ui/icon-menu
+     {:icon-button-element (r/as-element [ui/icon-button {:touch true}
+                                          [ic/navigation-more-vert {:style {:color "white"}}]])}]))
 
 (defn add-action-app-bar
   []
   [nav/main-app-bar #::nav{:title "View Action"
-                           :left-element [nav/app-bar-close-button {:href (path-for-page :actions)}]
+                           :left-element  [ui/icon-button
+                                           {:href (path-for-page :actions)}
+                                           [ic/navigation-arrow-back {:style {:color "white"}}]] #_[nav/app-bar-close-button ]
+
                            :right-element [add-action-button]}])
 
 (def chip-input (r/adapt-react-class js/MaterialUIChipInput))
