@@ -1,6 +1,7 @@
 (ns todomvc.events
   (:require [re-frame.core :as re-frame]
             [re-posh.core :as re-posh]
+            [datascript.core :as d]
             [todomvc.db :as db]))
 
 (re-posh/reg-event-ds
@@ -60,3 +61,25 @@
  (fn [_ [_ id name]]
    [{:db/id id
      :action/name name}]))
+
+(re-posh/reg-event-ds
+ :action/add-tag
+ (fn [_ [_ action-id tag-name]]
+   [{:db/id action-id :action/tags [{:tags/tag tag-name}]}]))
+
+(re-posh/reg-event-ds
+ :action/remove-tag
+ (fn [ds [_ tag-id ]]
+     [[:db.fn/retractEntity tag-id]]))
+
+;; (d/q  '[:find [(pull ?e [*]) ... ]
+;;         :in $ ?action-id
+;;         :where [?action-id :action/tags ?e]]
+;;       @db/conn 356 )
+
+  (d/q  '[:find ?n .
+                             :in $ ?action-id ?tag-name
+                             :where [?action-id :action/tags ?n]
+                             [?n :tags/tag ?tag-name]
+                             ]
+                           @db/conn 6 :foo)

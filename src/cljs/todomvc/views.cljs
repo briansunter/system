@@ -18,21 +18,24 @@
        {:style
         {:display :flex
          :justify-content :space-between
-         :flex-direction :row}}
+         }}
+       [:div
+        {:style {:flex-grow 3}}
        [ui/list-item {:class-name "task-list-item"
                      :href (path-for-page :view-action :action-id id)
                      }
-       ;; [:input {:type "checkbox"
-       ;;          :checked (:task/done? @task)
-       ;;          :on-change #(re-frame/dispatch [:task/set-status (:db/id @task) (not (:task/done? @task))])}]
-       [:span (:action/name @task)]
+        [:span
+         (:action/name @task)]
 
-        [ui/raised-button {:primary true
-                           :label "done"
-                           :style {:z-index 3}
-                           }]
         ]
 
+        ]
+       #_[ui/raised-button {:primary true
+                          :label "done"
+                          :style {:z-index 3
+                                  :width "50px"
+                                  }
+                          }]
        ])))
 
 (defn task-list []

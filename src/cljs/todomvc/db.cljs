@@ -5,9 +5,8 @@
 
 
 (def schema {:db/ident {:db/unique :db.unique/identity}
-             :tags/tag {:db/unique :db.unique/identity}
+             ;; :tags/tag {:db/unique :db.unique/identity}
              :ui.add-action/tag {:db/unique :db.unique/identity}
-
              :nav/route-params {:db/ident :nav/route-params
                                   :db/isComponent true
                                   :db/valueType :db.type/ref
@@ -23,6 +22,7 @@
                                   :db/cardinality :db.cardinality/one}
 
              :action/tags {:db/ident :action/tags
+                           :db/isComponent true
                            :db/valueType :db.type/ref
                            :db/cardinality :db.cardinality/many}})
 
@@ -111,6 +111,14 @@
  '[:find ?n
    :where
    [?a :db/ident :nav/current-page]
+   [?a :nav/route-params ?b]
+   [?b :action-id ?c]
+   ]  @conn)
+
+(d/q
+ '[:find ?n
+   :where
+   [416 :db/ident :nav/current-page]
    [?a :nav/route-params ?b]
    [?b :action-id ?c]
    ]  @conn)

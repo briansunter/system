@@ -56,4 +56,4 @@
 
 (re-posh/reg-pull-sub
  :ui.view-action/current-action
- '[:action/name {:action/tags [:tags/tag]}])
+ '[*])

@@ -53,30 +53,34 @@
         all-tags (re-frame/subscribe [:ui.add-action/all-tags])
         current-action-id (re-frame/subscribe [:ui.view-action/current-action-id])
         current-action (re-frame/subscribe [:ui.view-action/current-action @current-action-id])]
-    [:div
-    [add-action-app-bar]
-    [ui/paper {:z-depth 2
-               :style {:padding 10
-                       :overflow "hidden"}}
-     [ui/text-field {:floating-label-text "Action Name"
-                     :value (:action/name @current-action)
-                     :on-change #(re-frame/dispatch [:action/update-name @current-action-id (target-value %)])
-                     :style {:padding 10
-                             :font-size 26
-                             :multi-line true
-                             :width "100%"}}]
-     #_[ui/text-field {:floating-label-text "Action Description"
-                     :value @description
-                     :on-change  #(re-frame/dispatch [:add-action-update-description (target-value %)])
-                     :multi-line true
-                     :rows 3
-                     :style {:padding 10
-                             :width "100%"}}]
-     [action-tags-input {:tags (map :tags/tag (:action/tags @current-action))
-                        :matching-tags @all-tags
-                       ;; :on-input-update #(re-frame/dispatch [:search-for-tag %])
-                         :on-add-chip #(re-frame/dispatch [:ui.add-action/add-tag (keyword %)])
-                         :on-delete-chip #(re-frame/dispatch [:ui.add-action/remove-tag (keyword %)])}]
-     #_[ui/raised-button {:primary true
-                          :label "upload cover image"}]
-     ]]))
+    (fn []
+      [:div
+      [add-action-app-bar]
+      [ui/paper {:z-depth 2
+                 :style {:padding 10
+                         :overflow "hidden"}}
+       [ui/text-field {:floating-label-text "Action Name"
+                       :value (:action/name @current-action)
+                       :on-change #(re-frame/dispatch [:action/update-name @current-action-id (target-value %)])
+                       :style {:padding 10
+                               :font-size 26
+                               :multi-line true
+                               :width "100%"}}]
+       #_[ui/text-field {:floating-label-text "Action Description"
+                         :value @description
+                         :on-change  #(re-frame/dispatch [:add-action-update-description (target-value %)])
+                         :multi-line true
+                         :rows 3
+                         :style {:padding 10
+                                 :width "100%"}}]
+       [action-tags-input {:tags (map :tags/tag (:action/tags @current-action))
+                           :matching-tags @all-tags
+                           ;; :on-input-update #(re-frame/dispatch [:search-for-tag %])
+                           :on-add-chip #(re-frame/dispatch [:action/add-tag @current-action-id (keyword %)])
+                           :on-delete-chip (fn [t] (let [tag (keyword t)
+                                                         tag-id (:db/id (first (filter #(= (:tags/tag %) tag) (:action/tags @current-action))))
+                                                         ](re-frame/dispatch [:action/remove-tag tag-id]))
+                                            )}]
+       #_[ui/raised-button {:primary true
+                            :label "upload cover image"}]
+       ]])))
