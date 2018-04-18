@@ -3,10 +3,14 @@
    [datascript.core    :as d]
    [re-posh.core       :refer [connect!]]))
 
-
 (def schema {:db/ident {:db/unique :db.unique/identity}
              ;; :tags/tag {:db/unique :db.unique/identity}
              :ui.add-action/tag {:db/unique :db.unique/identity}
+             :nav/drawer-open?    {:db/ident :nav/drawer-open?
+                                  :db/unique :db.unique/identity
+                                  :db/valueType :db.type/ref
+                                  :db/cardinality :db.cardinality/one}
+
              :nav/route-params {:db/ident :nav/route-params
                                   :db/isComponent true
                                   :db/valueType :db.type/ref
@@ -100,40 +104,40 @@
 
 ;;    ])
 
-(d/q
- '[:find [(pull ?c [*])]
-   :where
-   [?a :db/ident :nav/current-page]
-   [?a :nav/route-params ?b]
-   [?b :action-id ?c]
-   ]  @conn)
+;; (d/q
+;;  '[:find [(pull ?c [*])]
+;;    :where
+;;    [?a :db/ident :nav/current-page]
+;;    [?a :nav/route-params ?b]
+;;    [?b :action-id ?c]
+;;    ]  @conn)
 
-(d/q
- '[:find ?n
-   :where
-   [?a :db/ident :nav/current-page]
-   [?a :nav/route-params ?b]
-   [?b :action-id ?c]
-   ]  @conn)
+;; (d/q
+;;  '[:find ?n
+;;    :where
+;;    [?a :db/ident :nav/current-page]
+;;    [?a :nav/route-params ?b]
+;;    [?b :action-id ?c]
+;;    ]  @conn)
 
-(d/q
- '[:find ?n
-   :where
-   [416 :db/ident :nav/current-page]
-   [?a :nav/route-params ?b]
-   [?b :action-id ?c]
-   ]  @conn)
+;; (d/q
+;;  '[:find ?n
+;;    :where
+;;    [416 :db/ident :nav/current-page]
+;;    [?a :nav/route-params ?b]
+;;    [?b :action-id ?c]
+;;    ]  @conn)
 
-(defn parse-int
-  [s]
-  (js/parseInt s))
+;; (defn parse-int
+;;   [s]
+;;   (js/parseInt s))
 
-(d/q
- '[:find ?e
-   :where
-   [_ :action-id ?e]
-   ]  @conn)
+;; (d/q
+;;  '[:find ?e
+;;    :where
+;;    [_ :action-id ?e]
+;;    ]  @conn)
 
-(d/pull @conn '[*] 10)
+;; (d/pull @conn '[*] 10)
 
 ;; (d/pull @conn '[:ui.add-action/action-name] [:db/ident :ui.add-action/action-name])

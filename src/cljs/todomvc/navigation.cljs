@@ -12,29 +12,29 @@
 
 (defn main-app-drawer
   []
-  (let [app-drawer-open (re-frame/subscribe [:ui.nav.drawer/app-drawer-open])]
-    [ui/drawer {:open @app-drawer-open
-                :docked false
-                :z-depth 2
-                :on-request-change #(re-frame/dispatch [:set-nav-drawer-open %])}
-     [ui/menu
-      [ui/divider]
-      [ui/menu-item {:primary-text "Feed"
-                     :href (path-for-page :feed)
-                     :left-icon (ic/communication-rss-feed)}]
-      [ui/divider]
-      #_[ui/menu-item {:primary-text "Cards"
-                     :href (path-for-page :cards)
-                     :left-icon (ic/hardware-sim-card)}]
-      [ui/divider]
-      [ui/menu-item {:primary-text "Decks"
-                     :href (path-for-page :decks)
-                     :left-icon (ic/hardware-dock)}]
-      [ui/divider]]]))
+  (let [app-drawer-open (re-frame/subscribe [:nav/drawer-open?])]
+    (fn [] [ui/drawer {:open @app-drawer-open
+                 :docked false
+                 :z-depth 2
+                 :on-request-change #(re-frame/dispatch [:set-nav-drawer %])}
+      [ui/menu
+       [ui/divider]
+       [ui/menu-item {:primary-text "Inbox"
+                      :href (path-for-page :feed)
+                      :left-icon (ic/communication-rss-feed)}]
+       [ui/divider]
+       [ui/menu-item {:primary-text "Tags"
+                      :href (path-for-page :cards)
+                      :left-icon (ic/hardware-sim-card)}]
+       [ui/divider]
+       [ui/menu-item {:primary-text "Decks"
+                      :href (path-for-page :decks)
+                      :left-icon (ic/hardware-dock)}]
+       [ui/divider]]])))
 
 (defn toggle-app-drawer-button
   []
-  [ui/icon-button {:on-click #(re-frame/dispatch [:toggle-nav-drawer])}
+  [ui/icon-button {:on-click #(re-frame/dispatch [:set-nav-drawer true])}
    [ic/navigation-menu {:style {:color "white"}}]])
 
 
@@ -56,7 +56,7 @@
 
 (defn app-bar-menu-button
   []
-  [ui/icon-button {:on-click #(re-frame/dispatch [:toggle-nav-drawer])}
+  [ui/icon-button {:on-click #(re-frame/dispatch [:set-nav-drawer true])}
    [ic/navigation-menu {:style {:fill "white"}}]])
 
 (defn left-app-bar-button-for-page
@@ -80,8 +80,8 @@
 
 
 (s/def ::elem (s/with-gen (s/cat :type #{:a}
-                               :props (s/? (s/keys :req-un [::style]))
-                               :elem vector?)
+                                 :props (s/? (s/keys :req-un [::style]))
+                                 :elem vector?)
                 #(gen/return [:a "test"])))
 
 (s/def ::hiccup ::elem)
@@ -96,19 +96,20 @@
 (defn main-app-bar
   [props]
   [:div
-  [main-app-drawer]
-  [ui/app-bar {:title (::title props)
-               :z-depth 2
-               :icon-element-left (r/as-element (or (::left-element props) [toggle-app-drawer-button]))
-               :icon-element-right (r/as-element (::right-element props))
-               :style {:position "fixed"
-                       :top 0
-                       :left 0}}]])
+   [main-app-drawer]
+   [ui/app-bar {:title (::title props)
+                  :z-depth 2
+                  :icon-element-left (r/as-element (or (::left-element props) [toggle-app-drawer-button]))
+                  :icon-element-right (r/as-element (::right-element props))
+                  :style {:position "fixed"
+                          :top 0
+                          :left 0}}]])
+
 
 (defn theme
   [content]
-    [ui/mui-theme-provider
-     {:mui-theme (get-mui-theme
-                  {:palette {:text-color (color :green600)}})}
-     [:div {:style {:margin-top 80}}
-      content]])
+  [ui/mui-theme-provider
+   {:mui-theme (get-mui-theme
+                {:palette {:text-color (color :green600)}})}
+   [:div {:style {:margin-top 80}}
+    content]])

@@ -68,6 +68,12 @@
    [{:db/id action-id :action/tags [{:tags/tag tag-name}]}]))
 
 (re-posh/reg-event-ds
+ :set-nav-drawer
+ (fn [_ [_ is-open?]]
+   (.log js/console "TOGGLE" is-open?)
+   [{:db/ident :nav/drawer-open? :nav/is-drawer-open? is-open?}]))
+
+(re-posh/reg-event-ds
  :action/remove-tag
  (fn [ds [_ tag-id ]]
      [[:db.fn/retractEntity tag-id]]))
@@ -77,9 +83,9 @@
 ;;         :where [?action-id :action/tags ?e]]
 ;;       @db/conn 356 )
 
-  (d/q  '[:find ?n .
-                             :in $ ?action-id ?tag-name
-                             :where [?action-id :action/tags ?n]
-                             [?n :tags/tag ?tag-name]
-                             ]
-                           @db/conn 6 :foo)
+  ;; (d/q  '[:find ?n .
+  ;;                            :in $ ?action-id ?tag-name
+  ;;                            :where [?action-id :action/tags ?n]
+  ;;                            [?n :tags/tag ?tag-name]
+  ;;                            ]
+  ;;                          @db/conn 6 :foo)

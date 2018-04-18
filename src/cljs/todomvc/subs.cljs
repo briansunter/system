@@ -42,9 +42,9 @@
    :where [_ :tags/tag ?n] ])
 
 (re-posh/reg-query-sub
- :ui.nav.drawer/app-drawer-open
+ :nav/drawer-open?
  '[:find ?n .
-   :where [:db/ident :ui.nav.drawer/app-drawer-open] [_ :ui.nav.drawer/app-drawer-open ?n]])
+   :where [:db/ident :nav/drawer-open?] [_ :nav/is-drawer-open? ?n]])
 
 (re-posh/reg-query-sub
  :ui.view-action/current-action-id
