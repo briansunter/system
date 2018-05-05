@@ -20,11 +20,11 @@
       [ui/menu
        [ui/divider]
        [ui/menu-item {:primary-text "Inbox"
-                      :href (path-for-page :feed)
+                      :href (path-for-page :actions)
                       :left-icon (ic/communication-rss-feed)}]
        [ui/divider]
        [ui/menu-item {:primary-text "Tags"
-                      :href (path-for-page :cards)
+                      :href (path-for-page :tags)
                       :left-icon (ic/hardware-sim-card)}]
        [ui/divider]
        [ui/menu-item {:primary-text "Decks"

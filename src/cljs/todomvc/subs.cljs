@@ -54,6 +54,14 @@
    [?a :nav/route-params ?b]
    [?b :action-id ?c]])
 
+(re-posh/reg-query-sub
+ :ui.view-action/current-tag
+ '[:find ?c .
+   :where
+   [?a :db/ident :nav/current-page]
+   [?a :nav/route-params ?b]
+   [?b :tag ?c]])
+
 (re-posh/reg-pull-sub
  :ui.view-action/current-action
  '[*])

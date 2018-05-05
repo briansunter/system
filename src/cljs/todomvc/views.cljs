@@ -8,34 +8,27 @@
             [reagent.core :as r]
             [todomvc.scenes.add-action :refer [add-action-panel]]
             [todomvc.scenes.view-action :refer [view-action-panel]]
+            [todomvc.scenes.view-tag :refer [view-tag-panel]]
+            [todomvc.scenes.tags :refer [tags-page]]
             [todomvc.routes :refer [path-for-page]]))
 
 (defn task-list-item [id]
   (let [task (re-frame/subscribe [:task id])]
     (fn []
-
       [:div
        {:style
         {:display :flex
-         :justify-content :space-between
-         }}
+         :justify-content :space-between}}
        [:div
         {:style {:flex-grow 3}}
-       [ui/list-item {:class-name "task-list-item"
-                     :href (path-for-page :view-action :action-id id)
-                     }
-        [:span
-         (:action/name @task)]
-
-        ]
-
-        ]
+        [ui/list-item {:class-name "task-list-item"
+                       :href (path-for-page :view-action :action-id id)}
+         [:span (:action/name @task)]]]
        #_[ui/raised-button {:primary true
-                          :label "done"
-                          :style {:z-index 3
-                                  :width "50px"
-                                  }
-                          }]
+                            :label "done"
+                            :style {:z-index 3
+                                    :width "50px"
+                                    }}]
        ])))
 
 (defn task-list []
@@ -71,6 +64,8 @@
     :actions [home-page]
     :add-action [add-action-panel]
     :view-action [view-action-panel]
+    :tags [tags-page]
+    :view-tag [view-tag-panel]
     [:div [:a "not found"]]))
 
 (defn main-panel []

@@ -17,11 +17,21 @@
         true :not-found}
    true :not-found})
 
+(def tag-routes
+  {"" :tags
+   "/" {"" :tags
+        "add" :add-tag
+        [:tag ""] :view-tag
+        [:tag "/"] :view-tag
+        true :not-found}
+   true :not-found})
+
 (def routes
   [
    "/" {"" :actions
         "feed"  :feed
         "actions" action-routes
+        "tags" tag-routes
         true :not-found}
    "" :actions
    true :not-found])
