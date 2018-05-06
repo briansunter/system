@@ -4,7 +4,8 @@
    [re-posh.core       :refer [connect!]]))
 
 (def schema {:db/ident {:db/unique :db.unique/identity}
-             ;; :tags/tag {:db/unique :db.unique/identity}
+             :tags/tag {:db/unique :db.unique/identity}
+             ;; :tags.template/type {:db/unique :db.unique/identity}
              :ui.add-action/tag {:db/unique :db.unique/identity}
              :nav/drawer-open?    {:db/ident :nav/drawer-open?
                                   :db/unique :db.unique/identity
@@ -29,20 +30,40 @@
              :action/tags {:db/ident :action/tags
                            :db/isComponent true
                            :db/valueType :db.type/ref
-                           :db/cardinality :db.cardinality/many}})
+                           :db/cardinality :db.cardinality/many}
+
+             :tags/template-types {
+                                   :db/isComponent true
+                                   :db/valueType :db.type/ref
+                                   :db/cardinality :db.cardinality/many}
+
+             })
 
 (def initial-db [
                  {:db/ident :nav/current-page :nav/page :nav.page/home}
-                 ;; {:tags/name :tags.name/brian}
+                 {:tags/tag :note
+                  :tags/template-types [{
+                                         :tags.template/name :simple-note
+                                         :tags.template/type :text-box
+                                         }
+                                        {
+                                         :app/type :tags/template
+                                         :tags.template/name :simple-field
+                                         :tags.template/type :text-field
+                                         }
+                                        ]}
+
+
+                 ;; {:tags.template/type :text-field}
+                 ;; {:tags.template/type :text-box}
                  {:db/ident :ui.add-action/add-action :ui.add-action/action-name "Test"
                   :ui.add-action/tags [{:ui.add-action/tag :foo}
                                        {:ui.add-action/tag :bar}]}
-                 {:tags/tag :fee}
                  { :db/id            -2
                   :app/type         :type/task
                   :action/name "Learn Clojure a little bit"
                   :task/description "Just learn it"
-                  :action/tags [{:tags/tag :foo} {:tags/tag :bar}]
+                  :action/tags [{:tags/tag :foo} {:tags/tag :note}]
                   :task/done?       false }
                  { :db/id            -3
                   :app/type         :type/task
@@ -141,3 +162,23 @@
 ;; (d/pull @conn '[*] 10)
 
 ;; (d/pull @conn '[:ui.add-action/action-name] [:db/ident :ui.add-action/action-name])
+
+;; #_(d/q '[:find [?n ...]
+;;    :where [_ :tags/tag ?n] ] @conn)
+
+#_(d/q '[:find ?n ?a
+       :where [_ :tags.template/name ?n]
+       [_ :tags.template/type ?a]
+       ] @conn)
+
+#_(d/q '[:find [?n ...]
+   :where [_ :tags.template/type ?n]] @conn)
+
+;; (d/q
+;; '[:find [?name ?type]
+;;   :where [?n :tags/tag ?tag]
+;;   [?n :tags.template/name ?name]
+;;   [?n :tags.template/type ?type]
+;;   [?a :db/ident :nav/current-page]
+;;   [?a :nav/route-params ?b]
+;;   [?b :tag ?tag]] @conn)

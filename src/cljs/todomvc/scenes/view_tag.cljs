@@ -47,61 +47,82 @@
                  :fullWidth true
                  :style {:margin 10}}]))
 
+(defn templates
+  [current-tag]
+  (let [
+        templates (re-frame/subscribe [:tags.template/tag-templates (keyword current-tag)])
+        ]
+      [:div
+       [:p (str @templates)]
+      ])
+    )
+
 (defn view-tag-panel
   []
   (let [add-action (re-frame/subscribe [:ui.add-action/add-action [:db/ident :ui.add-action/add-action]])
         all-tags (re-frame/subscribe [:ui.add-action/all-tags])
         current-action-id (re-frame/subscribe [:ui.view-action/current-action-id])
-        current-tag (re-frame/subscribe [:ui.view-action/current-tag])]
-    (fn []
-      [:div
-      [add-action-app-bar]
-       [ui/floating-action-button {:secondary true
-                                   :href (path-for-page :add-action)
-                                   :style {:bottom 0
-                                           :z-index 5
-                                           :right 0
-                                           :margin-right 20
-                                           :margin-bottom 20
-                                           :position "fixed"}}
-        (ic/content-add)]
-      [ui/paper {:z-depth 2
-                 :style {:padding 10
-                         :margin-bottom 20
-                         :overflow "hidden"}}
-       [ui/text-field {:floating-label-text "Tag Name"
-                       :value @current-tag
-                       :on-change #(re-frame/dispatch [:action/update-name @current-action-id (target-value %)])
-                       :style {:padding 10
-                               :font-size 26
-                               :multi-line true
-                               :width "100%"}}]
-       #_[ui/text-field {:floating-label-text "Action Description"
-                         :value @description
-                         :on-change  #(re-frame/dispatch [:add-action-update-description (target-value %)])
-                         :multi-line true
-                         :rows 3
-                         :style {:padding 10
-                                 :width "100%"}}]
-       [action-tags-input {:tags (map :tags/tag (:action/tags @current-tag))
-                           :matching-tags @all-tags
-                           ;; :on-input-update #(re-frame/dispatch [:search-for-tag %])
-                           :on-add-chip #(re-frame/dispatch [:action/add-tag @current-action-id (keyword %)])
-                           :on-delete-chip (fn [t] (let [tag (keyword t)
-                                                         tag-id (:db/id (first (filter #(= (:tags/tag %) tag) (:action/tags @current-tag))))
-                                                         ](re-frame/dispatch [:action/remove-tag tag-id]))
+        active-panel (re-frame/subscribe [:nav/current-page])
+        current-tag (re-frame/subscribe [:ui.view-action/current-tag])
+        template-types (re-frame/subscribe [:tags.template/template-types])
+        ]
+    [:div
+     [add-action-app-bar]
+     [ui/dialog {:open (= :add-template-tag @active-panel)
+                 :title "Add Capture Template"
+                 :actions [(r/as-element [ui/flat-button {:label "Cancel"}]) (r/as-element [ui/flat-button {:label "Save"
+                                                                                                            :on-click #(re-frame/dispatch [:tags.template/add-template :foo :text-box  (keyword @current-tag)])}])]}
+      [ui/text-field {:floating-label-text "name"}]
+      [ui/select-field (for [t @template-types]
+                         [ui/menu-item {:primary-text (str t)}])]]
+     [ui/floating-action-button {:secondary true
+                                 :href (path-for-page :add-template-tag :tag @current-tag)
+                                 :style {:bottom 0
+                                         :z-index 5
+                                         :right 0
+                                         :margin-right 20
+                                         :margin-bottom 20
+                                         :position "fixed"}}
+      (ic/content-add)]
+     [ui/paper {:z-depth 2
+                :style {:padding 10
+                        :margin-bottom 20
+                        :overflow "hidden"}}
+      [ui/text-field {:floating-label-text "Tag Name"
+                      :value @current-tag
+                      :on-change #(re-frame/dispatch [:action/update-name @current-action-id (target-value %)])
+                      :style {:padding 10
+                              :font-size 26
+                              :multi-line true
+                              :width "100%"}}]
+      #_[ui/text-field {:floating-label-text "Action Description"
+                        :value @description
+                        :on-change  #(re-frame/dispatch [:add-action-update-description (target-value %)])
+                        :multi-line true
+                        :rows 3
+                        :style {:padding 10
+                                :width "100%"}}]
+      [action-tags-input {:tags (map :tags/tag (:action/tags @current-tag))
+                          :matching-tags @all-tags
+                          ;; :on-input-update #(re-frame/dispatch [:search-for-tag %])
+                          :on-add-chip #(re-frame/dispatch [:action/add-tag @current-action-id (keyword %)])
+                          :on-delete-chip (fn [t] (let [tag (keyword t)
+                                                        tag-id (:db/id (first (filter #(= (:tags/tag %) tag) (:action/tags @current-tag))))
+                                                        ](re-frame/dispatch [:action/remove-tag tag-id]))
                                             )}]
-       #_[ui/raised-button {:primary true
-                            :label "upload cover image"}]
-       ]
-       [ui/card {:z-depth 2
-                  :style {:padding 10
-                          :overflow "hidden"}}
-        [:div
-         [:div {:style {:display :flex :flex-direction :row :justify-content :space-around}} [:p "Type"] [ui/select-field {:value 1}[ui/menu-item {:value 1 :primary-text "Text Box"}]]]
+      #_[ui/raised-button {:primary true
+                           :label "upload cover image"}]
+      ]
+     [ui/card {:z-depth 2
+               :style {:padding 10
+                       :overflow "hidden"}}
+
+      [templates @current-tag]
+      #_[:div
+         [:div {:style {:display :flex :flex-direction :row :justify-content :space-around}} [:p "Type"] [ui/select-field {:value 1} [ui/menu-item {:value 1 :primary-text "Text Box"}]]]
          [ui/divider]
          [:div {:style {:display :flex :flex-direction :row :justify-content :space-around}} [:p "Name"] [ui/text-field {:value "Note"}]]
          [ui/divider]
          [:div {:style {:display :flex :flex-direction :row :justify-content :space-around}} [:p "Default"] [ui/text-field {:value "Note"}]]]
 
-       ]])))
+      ]]))

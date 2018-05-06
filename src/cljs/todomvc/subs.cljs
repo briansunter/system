@@ -65,3 +65,18 @@
 (re-posh/reg-pull-sub
  :ui.view-action/current-action
  '[*])
+
+(re-posh/reg-query-sub
+ :tags.template/template-types
+ '[:find [?n ...]
+   :where [_ :tags.template/type ?n]])
+
+(re-posh/reg-query-sub
+ :tags.template/tag-templates
+ '[:find ?name ?type
+   :in $ ?tag
+   :where
+   [?n :tags/tag ?tag]
+   [?n :tags/template-types ?types]
+   [?types :tags.template/name ?name]
+   [?types :tags.template/type ?type]])

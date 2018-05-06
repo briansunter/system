@@ -66,6 +66,7 @@
     :view-action [view-action-panel]
     :tags [tags-page]
     :view-tag [view-tag-panel]
+    :add-template-tag [view-tag-panel]
     [:div [:a "not found"]]))
 
 (defn main-panel []

@@ -21,6 +21,7 @@
   {"" :tags
    "/" {"" :tags
         "add" :add-tag
+        [:tag "/add-template"] :add-template-tag
         [:tag ""] :view-tag
         [:tag "/"] :view-tag
         true :not-found}

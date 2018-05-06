@@ -78,6 +78,18 @@
  (fn [ds [_ tag-id ]]
      [[:db.fn/retractEntity tag-id]]))
 
+(re-posh/reg-event-ds
+ :tags.template/add-template
+ (fn [_ [_ name type tag]]
+   [
+    {
+     :app/type :tags/template
+     :tags/tag tag
+     :tags.template/name name
+     :tags.template/type type
+     }
+     ]))
+
 ;; (d/q  '[:find [(pull ?e [*]) ... ]
 ;;         :in $ ?action-id
 ;;         :where [?action-id :action/tags ?e]]
