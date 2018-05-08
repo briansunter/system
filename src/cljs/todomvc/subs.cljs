@@ -75,3 +75,7 @@
 (re-posh/reg-pull-sub
  :db
  '[*])
+
+(re-posh/reg-pull-sub
+ :tags/tag
+ '[*])

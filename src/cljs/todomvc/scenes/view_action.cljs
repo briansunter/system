@@ -75,7 +75,9 @@
   (let [add-action (re-frame/subscribe [:ui.add-action/add-action [:db/ident :ui.add-action/add-action]])
         all-tags (re-frame/subscribe [:ui.add-action/all-tags])
         current-action-id (re-frame/subscribe [:ui.view-action/current-action-id])
-        current-action (re-frame/subscribe [:ui.view-action/current-action @current-action-id])]
+        current-action (re-frame/subscribe [:ui.view-action/current-action @current-action-id])
+
+        ]
     (fn []
       [:div
        [add-action-app-bar]

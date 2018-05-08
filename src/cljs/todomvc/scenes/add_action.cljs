@@ -77,4 +77,27 @@
                          :on-delete-chip #(re-frame/dispatch [:ui.add-action/remove-tag (keyword %)])}]
      #_[ui/raised-button {:primary true
                           :label "upload cover image"}]
-     ]]))
+     ]
+
+     (for [t (:ui.add-action/tags @add-action)]
+       (let [tt (re-frame/subscribe [:tags/tag [:tags/tag (keyword (:ui.add-action/tag t))]])]
+         (when @tt
+           [ui/paper
+           {:style {:margin-top 20
+                    :margin-bottom 20}}
+            (for [template-type (:tags/template-types @tt)]
+              [:div
+               [:div
+                (str (:tags.template/name template-type))]
+               (case (:tags.template/type template-type)
+                 :text-field [ui/text-field]
+                 :text-box [ui/text-field {:multi-line true}]
+                 :date-picker [ui/date-picker]
+                 [:div "NONE"]
+                 )
+               ]
+              )
+           ])
+         )
+       )]
+    ))
