@@ -71,7 +71,7 @@
      [ui/dialog {:open (= :add-template-tag @active-panel)
                  :title "Add Capture Template"
                  :actions [(r/as-element [ui/flat-button {:label "Cancel"}]) (r/as-element [ui/flat-button {:label "Save"
-                                                                                                            :on-click #(re-frame/dispatch [:tags.template/add-template :foo :text-box  (keyword @current-tag)])}])]}
+                                                                                                            :on-click #(re-frame/dispatch [:tags.template/add-template :foo :text-box (keyword @current-tag)])}])]}
       [ui/text-field {:floating-label-text "name"}]
       [ui/select-field (for [t @template-types]
                          [ui/menu-item {:primary-text (str t)}])]]

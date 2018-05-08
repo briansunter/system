@@ -5,15 +5,6 @@
             [re-posh.core :as re-posh]))
 
 (re-posh/reg-query-sub
- :create-todo-form/id
- '[ :find ?id .
-   :where [?id :app/type :type/create-todo-form] ])
-
-(re-posh/reg-pull-sub
- :create-todo-form
- '[*])
-
-(re-posh/reg-query-sub
  :task-ids
  '[ :find  [?tid ...]
    :where [?tid :app/type :type/task] ])
@@ -80,3 +71,7 @@
    [?n :tags/template-types ?types]
    [?types :tags.template/name ?name]
    [?types :tags.template/type ?type]])
+
+(re-posh/reg-pull-sub
+ :db
+ '[*])

@@ -42,8 +42,7 @@
 (re-posh/reg-event-ds
  :ui.add-action/save-action
  (fn [_ [_ name tags]]
-   [{
-     :action/name name
+   [{:action/name name
      :action/tags (map (fn [x] {:tags/tag (:ui.add-action/tag x)}) tags)
      :app/type :type/task}
     {:db/ident :ui.add-action/add-action :ui.add-action/action-name "" :ui.add-action/tags []}]))
@@ -70,7 +69,6 @@
 (re-posh/reg-event-ds
  :set-nav-drawer
  (fn [_ [_ is-open?]]
-   (.log js/console "TOGGLE" is-open?)
    [{:db/ident :nav/drawer-open? :nav/is-drawer-open? is-open?}]))
 
 (re-posh/reg-event-ds
@@ -81,23 +79,22 @@
 (re-posh/reg-event-ds
  :tags.template/add-template
  (fn [_ [_ name type tag]]
-   [
-    {
-     :app/type :tags/template
-     :tags/tag tag
-     :tags.template/name name
-     :tags.template/type type
-     }
-     ]))
+   [{:tags/tag tag
+     :tags/template-types [{:tags.template/name name
+                            :tags.template/type type}]}]))
+
+(re-posh/reg-pull-sub
+ :ui.add-action/add-action
+ '[*])
 
 ;; (d/q  '[:find [(pull ?e [*]) ... ]
 ;;         :in $ ?action-id
 ;;         :where [?action-id :action/tags ?e]]
 ;;       @db/conn 356 )
 
-  ;; (d/q  '[:find ?n .
-  ;;                            :in $ ?action-id ?tag-name
-  ;;                            :where [?action-id :action/tags ?n]
-  ;;                            [?n :tags/tag ?tag-name]
-  ;;                            ]
-  ;;                          @db/conn 6 :foo)
+;; (d/q  '[:find ?n .
+;;                            :in $ ?action-id ?tag-name
+;;                            :where [?action-id :action/tags ?n]
+;;                            [?n :tags/tag ?tag-name]
+;;                            ]
+;;                          @db/conn 6 :foo)

@@ -8,6 +8,29 @@
             [todomvc.routes :refer [path-for-page]]
             [reagent.core :as r]))
 
+(defn template
+  [{:keys [:action/tags :tags.template/content]}]
+  (let [
+        ]
+    [:div
+     (for [{:keys [:tags/tag :tags/template-types]} tags]
+       (for [{:keys [:tags.template/name] :as t} template-types]
+         [ui/paper
+          {:style {:margin-bottom 20}}
+          [:div (str "name: " (:tags.template/name t))]
+          [:div (case (:tags.template/type t)
+                  :text-field [ui/text-field {:value (content (:tags.template/name t))} ]
+                  :text-box [ui/text-field {:value (content (:tags.template/name t))
+                                            :multi-line true}]
+                  :date-picker [ui/date-picker {:value (content (:tags.template/name t))}]
+                  )
+           ]
+          ]
+         )
+       )
+     ])
+  )
+
 (defn add-action-button
   []
   (let [add-action (re-frame/subscribe [:ui.add-action/add-action [:db/ident :ui.add-action/add-action]])]
@@ -55,32 +78,35 @@
         current-action (re-frame/subscribe [:ui.view-action/current-action @current-action-id])]
     (fn []
       [:div
-      [add-action-app-bar]
-      [ui/paper {:z-depth 2
-                 :style {:padding 10
-                         :overflow "hidden"}}
-       [ui/text-field {:floating-label-text "Action Name"
-                       :value (:action/name @current-action)
-                       :on-change #(re-frame/dispatch [:action/update-name @current-action-id (target-value %)])
-                       :style {:padding 10
-                               :font-size 26
-                               :multi-line true
-                               :width "100%"}}]
-       #_[ui/text-field {:floating-label-text "Action Description"
-                         :value @description
-                         :on-change  #(re-frame/dispatch [:add-action-update-description (target-value %)])
-                         :multi-line true
-                         :rows 3
-                         :style {:padding 10
-                                 :width "100%"}}]
-       [action-tags-input {:tags (map :tags/tag (:action/tags @current-action))
-                           :matching-tags @all-tags
-                           ;; :on-input-update #(re-frame/dispatch [:search-for-tag %])
-                           :on-add-chip #(re-frame/dispatch [:action/add-tag @current-action-id (keyword %)])
-                           :on-delete-chip (fn [t] (let [tag (keyword t)
-                                                         tag-id (:db/id (first (filter #(= (:tags/tag %) tag) (:action/tags @current-action))))
-                                                         ](re-frame/dispatch [:action/remove-tag tag-id]))
-                                            )}]
-       #_[ui/raised-button {:primary true
-                            :label "upload cover image"}]
-       ]])))
+       [add-action-app-bar]
+       [ui/paper {:z-depth 2
+                  :style {:padding 10
+                          :overflow "hidden"}}
+        [ui/text-field {:floating-label-text "Action Name"
+                        :value (:action/name @current-action)
+                        :on-change #(re-frame/dispatch [:action/update-name @current-action-id (target-value %)])
+                        :style {:padding 10
+                                :font-size 26
+                                :multi-line true
+                                :width "100%"}}]
+        #_[ui/text-field {:floating-label-text "Action Description"
+                          :value @description
+                          :on-change  #(re-frame/dispatch [:add-action-update-description (target-value %)])
+                          :multi-line true
+                          :rows 3
+                          :style {:padding 10
+                                  :width "100%"}}]
+        [action-tags-input {:tags (map :tags/tag (:action/tags @current-action))
+                            :matching-tags @all-tags
+                            ;; :on-input-update #(re-frame/dispatch [:search-for-tag %])
+                            :on-add-chip #(re-frame/dispatch [:action/add-tag @current-action-id (keyword %)])
+                            :on-delete-chip (fn [t] (let [tag (keyword t)
+                                                          tag-id (:db/id (first (filter #(= (:tags/tag %) tag) (:action/tags @current-action))))
+                                                          ](re-frame/dispatch [:action/remove-tag tag-id])))}]
+
+
+        #_[ui/raised-button {:primary true
+                             :label "upload cover image"}]
+        ]
+       [template @current-action]
+       ])))
