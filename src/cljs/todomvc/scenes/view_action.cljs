@@ -42,7 +42,6 @@
   [ui/paper
    {:style {:margin-top 20
             :margin-bottom 20}}
-   [:p (str add-action)]
    (for [t (:action/tags add-action)]
      (for [template-type (:tags/template-types t)]
        [render-tag-template add-action t template-type]))])

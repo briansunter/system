@@ -88,6 +88,12 @@
  :ui.add-action/add-action
  '[*])
 
+(re-posh/reg-event-ds
+ :tags.template/update-add-action-template-content
+ (fn [_ [_ template-name content]]
+   [{:db/ident :ui.add-action/add-action
+     :tags.template/content {template-name content}}]))
+
 ;; (d/q  '[:find [(pull ?e [*]) ... ]
 ;;         :in $ ?action-id
 ;;         :where [?action-id :action/tags ?e]]
