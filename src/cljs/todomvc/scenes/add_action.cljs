@@ -12,9 +12,9 @@
   []
   (let [add-action (re-frame/subscribe [:ui.add-action/add-action [:db/ident :ui.add-action/add-action]])]
     [ui/flat-button {:label "save"
-                     :on-click #(re-frame/dispatch [:ui.add-action/save-action (:ui.add-action/action-name @add-action) (:ui.add-action/tags @add-action) (:tags.template/content @add-action)])
+                     :on-click #(re-frame/dispatch [:ui.add-action/save-action (:action/action-name @add-action) (:ui.add-action/tags @add-action) (:tags.template/content @add-action)])
                      :href (path-for-page :actions)
-                     :disabled (clojure.string/blank? (:ui.add-action/action-name @add-action))
+                     :disabled (clojure.string/blank? (:action/action-name @add-action))
                      :style {:color "white"
                              :margin-top 5}}]))
 
@@ -102,7 +102,7 @@
                         :overflow "hidden"
                         :margin-bottom 20}}
       [ui/text-field {:floating-label-text "Action Name"
-                      :value (:ui.add-action/action-name @add-action)
+                      :value (:action/action-name @add-action)
                       :on-change #(re-frame/dispatch [:ui.add-action/update-name (target-value %)])
                       :style {:padding 10
                               :font-size 26

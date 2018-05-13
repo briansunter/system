@@ -16,7 +16,7 @@
     (fn [] [ui/drawer {:open @app-drawer-open
                  :docked false
                  :z-depth 2
-                 :on-request-change #(re-frame/dispatch [:set-nav-drawer %])}
+                       :on-request-change #(re-frame/dispatch [:set-nav-drawer (boolean %)])}
       [ui/menu
        [ui/divider]
        [ui/menu-item {:primary-text "Inbox"

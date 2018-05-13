@@ -67,7 +67,7 @@
    {:tags.template/type :text-box}
 
    {:db/ident :ui.add-action/add-action
-    :ui.add-action/action-name "Test"
+    :action/action-name "Test"
     :ui.add-action/tags
     [{:ui.add-action/tag :task}
      {:ui.add-action/tag :note}]
@@ -76,7 +76,7 @@
      :due-date "0"}}
 
    {:app/type :app.type/action
-    :action/name "Learn Clojure a little bit"
+    :action/action-name "Learn Clojure a little bit"
     :action/tags
     [{:tags/tag :foo}
      {:tags/tag :note}]
@@ -90,7 +90,7 @@
     :tags.template/content
     {:simple-note "This is a \n cool note"
      :due-date (.getTime (js/Date.))}
-    :action/name "Have a coffee"}])
+    :action/action-name "Have a coffee"}])
 
 (defonce conn (d/create-conn schema))
 (connect! conn)

@@ -10,7 +10,6 @@
             [todomvc.routes :as routes]
             [todomvc.config :as config]))
 
-
 (defn dev-setup []
   (when config/debug?
     (enable-console-print!)
