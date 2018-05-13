@@ -4,6 +4,7 @@
             [todomvc.events]
             [todomvc.subs]
             [todomvc.db :as db]
+            #_[re-frisk.core :refer [enable-re-frisk! enable-frisk! add-data] :refer-macros [def-view]]
             [todomvc.dfs.sync :as sync]
             [todomvc.views :as views]
             [todomvc.routes :as routes]
@@ -26,5 +27,4 @@
   (enable-console-print!)
   (mount-root)
   (routes/app-routes)
-  (sync/datoms!)
-  )
+  (sync/datoms!))
