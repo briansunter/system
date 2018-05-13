@@ -42,13 +42,6 @@
     {:db/ident :ui.add-action/add-action :action/action-name "" :ui.add-action/tags []}]))
 
 (re-posh/reg-event-ds
- :ui.add-action/add-action
- (fn [_ [_ name tags]]
-   [{:action/action-name name
-     :action/tags (map (fn [{:keys [tag]}] {:tags/tag tag}) tags)
-     :app/type :type/task} ]))
-
-(re-posh/reg-event-ds
  :action/update-name
  (fn [_ [_ id name]]
    [{:db/id id
@@ -75,10 +68,6 @@
    [{:tags/tag tag
      :tags/template-types [{:tags.template/name name
                             :tags.template/type type}]}]))
-
-(re-posh/reg-pull-sub
- :ui.add-action/add-action
- '[*])
 
 (re-posh/reg-event-ds
  :tags.template/update-add-action-template-content
