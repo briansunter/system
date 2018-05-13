@@ -24,11 +24,6 @@
         [ui/list-item {:class-name "task-list-item"
                        :href (path-for-page :view-action :nav/action-id id)}
          [:span (:action/action-name @task)]]]
-       #_[ui/raised-button {:primary true
-                            :label "done"
-                            :style {:z-index 3
-                                    :width "50px"
-                                    }}]
        ])))
 
 (defn task-list []
@@ -43,21 +38,27 @@
   [nav/main-app-bar #:nav{:title "Actions"
                            :left-element [nav/app-bar-menu-button {:href (path-for-page :actions)}]}])
 
+
+(defn- add-action-button
+  []
+  [ui/floating-action-button {:secondary true
+                              :href (path-for-page :add-action)
+                              :style {:bottom 0
+                                      :z-index 5
+                                      :right 0
+                                      :margin-right 20
+                                      :margin-bottom 20
+                                      :position "fixed"}}
+   (ic/content-add)])
+
 (defn home-page []
   (let [current-page (re-frame/subscribe [:nav/current-page])]
     [:div
      {:style {:margin 0}}
+     [add-action-button]
      [actions-app-bar]
      [task-list]
-     [ui/floating-action-button {:secondary true
-                                 :href (path-for-page :add-action)
-                                 :style {:bottom 0
-                                         :z-index 5
-                                         :right 0
-                                         :margin-right 20
-                                         :margin-bottom 20
-                                         :position "fixed"}}
-      (ic/content-add)]]))
+     ]))
 
 (defn- panels [panel-name]
   (case panel-name

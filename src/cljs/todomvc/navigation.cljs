@@ -37,6 +37,10 @@
   [ui/icon-button {:on-click #(re-frame/dispatch [:nav/set-drawer-open true])}
    [ic/navigation-menu {:style {:color "white"}}]])
 
+(defn app-bar-close-button
+  [props]
+  [ui/icon-button props [ic/navigation-close {:style {:fill "white"}}]])
+
 (defn main-app-bar
   [{:keys [nav/title nav/left-element nav/right-element] :as props}]
   [:div

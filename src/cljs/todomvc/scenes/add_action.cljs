@@ -21,7 +21,7 @@
 (defn add-action-app-bar
   []
   [nav/main-app-bar #:nav{:title "Add Action"
-                           :left-element [:nav/app-bar-close-button {:href (path-for-page :actions)}]
+                           :left-element [nav/app-bar-close-button {:href (path-for-page :actions)}]
                            :right-element [add-action-button]}])
 
 (def chip-input (r/adapt-react-class js/MaterialUIChipInput))
