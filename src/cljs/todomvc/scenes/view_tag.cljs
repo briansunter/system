@@ -49,13 +49,10 @@
 
 (defn templates
   [current-tag]
-  (let [
-        templates (re-frame/subscribe [:tags.template/tag-templates (keyword current-tag)])
-        ]
-      [:div
-       [:p (str @templates)]
-      ])
-    )
+  (let [templates (re-frame/subscribe [:tags.template/tag-templates (keyword current-tag)])]
+    [:div
+     [:p (str @templates)]
+     ]))
 
 (defn view-tag-panel
   []
@@ -64,8 +61,7 @@
         current-action-id (re-frame/subscribe [:ui.view-action/current-action-id])
         active-panel (re-frame/subscribe [:nav/current-page])
         current-tag (re-frame/subscribe [:ui.view-action/current-tag])
-        template-types (re-frame/subscribe [:tags.template/template-types])
-        ]
+        template-types (re-frame/subscribe [:tags.template/template-types])]
     [:div
      [add-action-app-bar]
      [ui/dialog {:open (= :add-template-tag @active-panel)

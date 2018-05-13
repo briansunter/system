@@ -41,8 +41,9 @@
 
 (re-posh/reg-event-ds
  :ui.add-action/save-action
- (fn [_ [_ name tags]]
+ (fn [_ [_ name tags template-content]]
    [{:action/name name
+     :tags.template/content template-content
      :action/tags (map (fn [x] {:tags/tag (:ui.add-action/tag x)}) tags)
      :app/type :type/task}
     {:db/ident :ui.add-action/add-action :ui.add-action/action-name "" :ui.add-action/tags []}]))

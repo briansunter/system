@@ -8,6 +8,45 @@
             [todomvc.routes :refer [path-for-page]]
             [reagent.core :as r]))
 
+(defn target-value
+  [tv]
+  (-> tv .-target .-value))
+
+(defn render-tag-template
+  [add-action tag template-type]
+  [:div
+   {:style {:flex-direction :row
+            :display :flex
+            :padding 20}}
+   [:div {:style {:flex 1
+                  :justify-content :center
+                  :display :flex} }[:div (str (:tags.template/name template-type))]]
+   [:div
+    {:style {:flex 3
+             :display :flex} }
+    (case (:tags.template/type template-type)
+      :text-field [ui/text-field {:flex 1
+                                  :style {:flex 1}
+                                  :value   ( (:tags.template/name template-type)(:tags.template/content add-action))}]
+      :text-box [ui/text-field {:multi-line true
+                                :style {:flex 1}
+                                :value ( (:tags.template/name template-type)(:tags.template/content add-action))
+                                :on-change #(re-frame/dispatch [:ui.add-action/update-name (target-value %)])
+                                }]
+      :date-picker [ui/date-picker {:flex 1
+                                    :value (js/Date. ( (:tags.template/name template-type)(:tags.template/content add-action)))}]
+      [:div "NONE"])]])
+
+(defn render-tag-templates
+  [add-action]
+  [ui/paper
+   {:style {:margin-top 20
+            :margin-bottom 20}}
+   [:p (str add-action)]
+   (for [t (:action/tags add-action)]
+     (for [template-type (:tags/template-types t)]
+       [render-tag-template add-action t template-type]))])
+
 (defn template
   [{:keys [:action/tags :tags.template/content]}]
   (let [
@@ -110,5 +149,5 @@
         #_[ui/raised-button {:primary true
                              :label "upload cover image"}]
         ]
-       [template @current-action]
+       [render-tag-templates @current-action]
        ])))

@@ -12,7 +12,7 @@
   []
   (let [add-action (re-frame/subscribe [:ui.add-action/add-action [:db/ident :ui.add-action/add-action]])]
     [ui/flat-button {:label "save"
-                     :on-click #(re-frame/dispatch [:ui.add-action/save-action (:ui.add-action/action-name @add-action) (:ui.add-action/tags @add-action) ])
+                     :on-click #(re-frame/dispatch [:ui.add-action/save-action (:ui.add-action/action-name @add-action) (:ui.add-action/tags @add-action) (:tags.template/content @add-action)])
                      :href (path-for-page :actions)
                      :disabled (clojure.string/blank? (:ui.add-action/action-name @add-action))
                      :style {:color "white"
@@ -47,57 +47,59 @@
                  :fullWidth true
                  :style {:margin 10}}]))
 
+(defn render-tag-template
+  [add-action tag template-type]
+  [:div
+   {:style {:flex-direction :row
+            :display :flex
+            :padding 20}}
+   [:div {:style {:flex 1
+                  :justify-content :center
+                  :display :flex} }[:div (str (:tags.template/name template-type))]]
+   [:div
+    {:style {:flex 3
+             :display :flex} }
+    (case (:tags.template/type template-type)
+      :text-field [ui/text-field {:flex 1
+                                  :style {:flex 1}
+                                  :value   ((:tags.template/content add-action) (:tags.template/name template-type))}]
+      :text-box [ui/text-field {:multi-line true
+                                :style {:flex 1}
+                                :value ((:tags.template/content add-action) (:tags.template/name template-type))
+                                :on-change #(re-frame/dispatch [:ui.add-action/update-name (target-value %)])
+                                }]
+      :date-picker [ui/date-picker {:flex 1
+                                    :value (js/Date. ((:tags.template/content add-action) (:tags.template/name template-type)))}]
+      [:div "NONE"])]])
+
+(defn render-tag-templates
+  [add-action]
+  [ui/paper
+   (for [t (:ui.add-action/tags add-action)]
+    (let [tt (re-frame/subscribe [:tags/tag [:tags/tag (keyword (:ui.add-action/tag t))]])]
+       {:style {:margin-top 20
+                :margin-bottom 20}}
+       (when @tt (for [template-type (:tags/template-types @tt)]
+          [render-tag-template add-action @tt template-type]))))])
+
 (defn add-action-panel
   []
   (let [add-action (re-frame/subscribe [:ui.add-action/add-action [:db/ident :ui.add-action/add-action]])
         all-tags (re-frame/subscribe [:ui.add-action/all-tags])]
     [:div
-    [add-action-app-bar]
-    [ui/paper {:z-depth 2
-               :style {:padding 10
-                       :overflow "hidden"}}
-     [ui/text-field {:floating-label-text "Action Name"
-                     :value (:ui.add-action/action-name @add-action)
-                     :on-change #(re-frame/dispatch [:ui.add-action/update-name (target-value %)])
-                     :style {:padding 10
-                             :font-size 26
-                             :multi-line true
-                             :width "100%"}}]
-     #_[ui/text-field {:floating-label-text "Action Description"
-                     :value @description
-                     :on-change  #(re-frame/dispatch [:add-action-update-description (target-value %)])
-                     :multi-line true
-                     :rows 3
-                     :style {:padding 10
-                             :width "100%"}}]
-     [action-tags-input {:tags (map :ui.add-action/tag (:ui.add-action/tags @add-action))
-                        :matching-tags @all-tags
-                       ;; :on-input-update #(re-frame/dispatch [:search-for-tag %])
-                         :on-add-chip #(re-frame/dispatch [:ui.add-action/add-tag (keyword %)])
-                         :on-delete-chip #(re-frame/dispatch [:ui.add-action/remove-tag (keyword %)])}]
-     #_[ui/raised-button {:primary true
-                          :label "upload cover image"}]
-     ]
-
-     (for [t (:ui.add-action/tags @add-action)]
-       (let [tt (re-frame/subscribe [:tags/tag [:tags/tag (keyword (:ui.add-action/tag t))]])]
-         (when @tt
-           [ui/paper
-           {:style {:margin-top 20
-                    :margin-bottom 20}}
-            (for [template-type (:tags/template-types @tt)]
-              [:div
-               [:div
-                (str (:tags.template/name template-type))]
-               (case (:tags.template/type template-type)
-                 :text-field [ui/text-field]
-                 :text-box [ui/text-field {:multi-line true}]
-                 :date-picker [ui/date-picker]
-                 [:div "NONE"]
-                 )
-               ]
-              )
-           ])
-         )
-       )]
-    ))
+     [add-action-app-bar]
+     [ui/paper {:z-depth 2
+                :style {:padding 10
+                        :overflow "hidden"}}
+      [ui/text-field {:floating-label-text "Action Name"
+                      :value (:ui.add-action/action-name @add-action)
+                      :on-change #(re-frame/dispatch [:ui.add-action/update-name (target-value %)])
+                      :style {:padding 10
+                              :font-size 26
+                              :multi-line true
+                              :width "100%"}}]
+      [action-tags-input {:tags (map :ui.add-action/tag (:ui.add-action/tags @add-action))
+                          :matching-tags @all-tags
+                          :on-add-chip #(re-frame/dispatch [:ui.add-action/add-tag (keyword %)])
+                          :on-delete-chip #(re-frame/dispatch [:ui.add-action/remove-tag (keyword %)])}]]
+     [render-tag-templates @add-action]]))

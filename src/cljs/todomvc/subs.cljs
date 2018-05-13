@@ -20,7 +20,7 @@
 
 (re-posh/reg-pull-sub
  :ui.add-action/add-action
- '[:ui.add-action/action-name :ui.add-action/tags])
+ '[*])
 
 (re-posh/reg-query-sub
  :ui.add-action/tags

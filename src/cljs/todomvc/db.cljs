@@ -62,9 +62,12 @@
                  ;; {:tags.template/type :text-field}
                  ;; {:tags.template/type :text-box}
 
-                 {:db/ident :ui.add-action/add-action :ui.add-action/action-name "Test"
-                  :ui.add-action/tags [{:ui.add-action/tag :foo}
-                                       {:ui.add-action/tag :bar}]}
+                 {:db/ident :ui.add-action/add-action
+                  :ui.add-action/action-name "Test"
+                  :ui.add-action/tags [{:ui.add-action/tag :task}
+                                       {:ui.add-action/tag :note}]
+                  :tags.template/content {:simple-note "this is a cool \n note that i'm using for testing"
+                                          :due-date "0"}}
                  { :db/id            -2
                   :app/type         :type/task
                   :action/name "Learn Clojure a little bit"
