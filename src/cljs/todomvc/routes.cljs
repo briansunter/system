@@ -30,7 +30,6 @@
 (def routes
   [
    "/" {"" :actions
-        "feed"  :feed
         "actions" action-routes
         "tags" tag-routes
         true :not-found}

@@ -17,7 +17,7 @@
 
 (defn add-action-app-bar
   []
-  [nav/main-app-bar #::nav{:title "View Action"
+  [nav/main-app-bar #:nav{:title "View Action"
                            :left-element  [ui/icon-button
                                            {:href (path-for-page :tags)}
                                            [ic/navigation-arrow-back {:style {:color "white"}}]] #_[nav/app-bar-close-button ]

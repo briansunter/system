@@ -38,7 +38,7 @@
 
 (defn actions-app-bar
   []
-  [nav/main-app-bar #::nav{:title "Tags"
+  [nav/main-app-bar #:nav{:title "Tags"
                            :left-element [nav/app-bar-menu-button {:href (path-for-page :actions)}]}])
 
 (defn tags-page []

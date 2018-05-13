@@ -40,7 +40,7 @@
 
 (defn actions-app-bar
   []
-  [nav/main-app-bar #::nav{:title "Actions"
+  [nav/main-app-bar #:nav{:title "Actions"
                            :left-element [nav/app-bar-menu-button {:href (path-for-page :actions)}]}])
 
 (defn home-page []

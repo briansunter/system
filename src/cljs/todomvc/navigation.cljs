@@ -32,50 +32,22 @@
                      :left-icon (ic/action-pageview)}]
       [ui/divider]]]))
 
-(defn toggle-app-drawer-button
+(defn app-bar-menu-button
   []
   [ui/icon-button {:on-click #(re-frame/dispatch [:nav/set-drawer-open true])}
    [ic/navigation-menu {:style {:color "white"}}]])
 
-(s/def ::title string?)
-(s/def ::elem-type #{:div :a :href })
-(s/def ::props-elem (s/cat :type ::elem-type :props map? :elem string?))
-
-(s/def ::color #{"blue" "green" "red" "magenta" "lavender"})
-(s/def ::font-size (s/and pos-int? #(< 0 20)))
-(s/def ::draggable true?)
-(s/def ::rotate pos-int?)
-(s/def ::x pos-int?)
-
-(s/def ::style (s/keys :req-un [::color ::font-size]))
-
-
-(s/def ::elem (s/with-gen (s/cat :type #{:a}
-                                 :props (s/? (s/keys :req-un [::style]))
-                                 :elem vector?)
-                #(gen/return [:a "test"])))
-
-(s/def ::hiccup ::elem)
-
-(s/def ::left-element ::hiccup)
-(s/def ::right-element ::hiccup)
-
-(s/def ::app-bar-props (s/keys :req [::title ::left-element ::right-element]))
-
-(s/fdef main-app-bar :args ::app-bar-props)
-
 (defn main-app-bar
-  [props]
+  [{:keys [nav/title nav/left-element nav/right-element] :as props}]
   [:div
    [main-app-drawer]
-   [ui/app-bar {:title (::title props)
+   [ui/app-bar {:title title
                 :z-depth 2
-                :icon-element-left (r/as-element (or (::left-element props) [toggle-app-drawer-button]))
-                :icon-element-right (r/as-element (::right-element props))
+                :icon-element-left (r/as-element (or left-element [app-bar-menu-button]))
+                :icon-element-right (r/as-element right-element)
                 :style {:position "fixed"
                         :top 0
                         :left 0}}]])
-
 
 (defn theme
   [content]
