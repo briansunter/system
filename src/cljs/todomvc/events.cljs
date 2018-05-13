@@ -53,14 +53,14 @@
    [{:db/id action-id :action/tags [{:tags/tag tag-name}]}]))
 
 (re-posh/reg-event-ds
- :set-nav-drawer
- (fn [_ [_ is-open?]]
-   [{:db/ident :nav/drawer-open? :nav/is-drawer-open? is-open?}]))
-
-(re-posh/reg-event-ds
  :action/remove-tag
  (fn [ds [_ tag-id ]]
    [[:db.fn/retractEntity tag-id]]))
+
+(re-posh/reg-event-ds
+ :set-nav-drawer
+ (fn [_ [_ is-open?]]
+   [{:db/ident :nav/drawer-open? :nav/is-drawer-open? is-open?}]))
 
 (re-posh/reg-event-ds
  :tags.template/add-template

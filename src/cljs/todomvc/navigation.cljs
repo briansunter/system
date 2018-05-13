@@ -16,20 +16,20 @@
     (fn [] [ui/drawer {:open @app-drawer-open
                  :docked false
                  :z-depth 2
-                       :on-request-change #(re-frame/dispatch [:set-nav-drawer (boolean %)])}
+                 :on-request-change #(re-frame/dispatch [:set-nav-drawer boolean %])}
       [ui/menu
        [ui/divider]
        [ui/menu-item {:primary-text "Inbox"
                       :href (path-for-page :actions)
-                      :left-icon (ic/communication-rss-feed)}]
+                      :left-icon (ic/action-list)}]
        [ui/divider]
        [ui/menu-item {:primary-text "Tags"
                       :href (path-for-page :tags)
-                      :left-icon (ic/hardware-sim-card)}]
+                      :left-icon (ic/action-loyalty)}]
        [ui/divider]
-       [ui/menu-item {:primary-text "Decks"
+       [ui/menu-item {:primary-text "Views"
                       :href (path-for-page :decks)
-                      :left-icon (ic/hardware-dock)}]
+                      :left-icon (ic/action-pageview)}]
        [ui/divider]]])))
 
 (defn toggle-app-drawer-button
