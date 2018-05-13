@@ -94,6 +94,11 @@
    [{:db/ident :ui.add-action/add-action
      :tags.template/content {template-name content}}]))
 
+(re-posh/reg-event-ds
+ :tags.template/update-action-template-content
+ (fn [_ [_ action-id template-name content]]
+   [{:db/id action-id
+     :tags.template/content {template-name content}}]))
 ;; (d/q  '[:find [(pull ?e [*]) ... ]
 ;;         :in $ ?action-id
 ;;         :where [?action-id :action/tags ?e]]

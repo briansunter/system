@@ -12,10 +12,15 @@
   [tv]
   (-> tv .-target .-value))
 
+(defn update-template-content
+  [action-id template-name content]
+  (re-frame/dispatch [:tags.template/update-action-template-content action-id template-name content]))
+
 (defn render-tag-template
   [add-action tag template-type]
   [:div
-   {:style {:flex-direction :row
+   {:key (:tags.template/name template-type)
+    :style {:flex-direction :row
             :display :flex
             :padding 20}}
    [:div {:style {:flex 1
@@ -27,47 +32,27 @@
     (case (:tags.template/type template-type)
       :text-field [ui/text-field {:flex 1
                                   :style {:flex 1}
-                                  :value   ( (:tags.template/name template-type)(:tags.template/content add-action))}]
+                                  :on-change #(update-template-content (:db/id add-action) (:tags.template/name template-type)(target-value %))
+                                  :value   ((:tags.template/content add-action) (:tags.template/name template-type)(:tags.template/name template-type))}]
       :text-box [ui/text-field {:multi-line true
                                 :style {:flex 1}
-                                :value ( (:tags.template/name template-type)(:tags.template/content add-action))
-                                :on-change #(re-frame/dispatch [:ui.add-action/update-name (target-value %)])
+                                :value ((:tags.template/content add-action) (:tags.template/name template-type))
+                                :on-change #(update-template-content (:db/id add-action) (:tags.template/name template-type)(target-value %))
                                 }]
       :date-picker [ui/date-picker {:flex 1
-                                    :value (js/Date. ( (:tags.template/name template-type)(:tags.template/content add-action)))}]
+                                    :on-change #(update-template-content (:db/id add-action) (:tags.template/name template-type) (.getTime %2))
+                                    :value (js/Date. ((:tags.template/content add-action) (:tags.template/name template-type)))}]
       [:div "NONE"])]])
 
 (defn render-tag-templates
   [add-action]
   [ui/paper
-   {:style {:margin-top 20
-            :margin-bottom 20}}
-   (for [t (:action/tags add-action)]
-     (for [template-type (:tags/template-types t)]
-       [render-tag-template add-action t template-type]))])
-
-(defn template
-  [{:keys [:action/tags :tags.template/content]}]
-  (let [
-        ]
-    [:div
-     (for [{:keys [:tags/tag :tags/template-types]} tags]
-       (for [{:keys [:tags.template/name] :as t} template-types]
-         [ui/paper
-          {:style {:margin-bottom 20}}
-          [:div (str "name: " (:tags.template/name t))]
-          [:div (case (:tags.template/type t)
-                  :text-field [ui/text-field {:value (content (:tags.template/name t))} ]
-                  :text-box [ui/text-field {:value (content (:tags.template/name t))
-                                            :multi-line true}]
-                  :date-picker [ui/date-picker {:value (content (:tags.template/name t))}]
-                  )
-           ]
-          ]
-         )
-       )
-     ])
-  )
+   (doall (for [t (:action/tags add-action)]
+            (let [tt (re-frame/subscribe [:tags/tag [:tags/tag (keyword (:tags/tag t))]])]
+              {:style {:margin-top 20
+                       :margin-bottom 20}}
+              (when @tt (doall (for [template-type (:tags/template-types @tt)]
+                                 [render-tag-template add-action @tt template-type]))))))])
 
 (defn add-action-button
   []
