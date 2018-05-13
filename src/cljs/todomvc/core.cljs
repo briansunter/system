@@ -26,4 +26,4 @@
   (enable-console-print!)
   (mount-root)
   (routes/app-routes)
-  (sync/datoms!))
+  )
