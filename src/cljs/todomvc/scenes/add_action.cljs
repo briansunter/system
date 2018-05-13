@@ -53,11 +53,13 @@
 
 (defn render-tag-template
   [add-action tag template-type]
-  [:div
+  [ui/paper
    {:key (:tags.template/name template-type)
     :style {:flex-direction :row
             :display :flex
-            :padding 20}}
+            :padding 20
+            :margin-top 20
+            :margin-bottom 20}}
    [:div {:style {:flex 1
                   :justify-content :center
                   :display :flex} }[:div (str (:tags.template/name template-type))]]
@@ -81,7 +83,7 @@
 
 (defn render-tag-templates
   [add-action]
-  [ui/paper
+  [:div
    (doall (for [t (:ui.add-action/tags add-action)]
             (let [tt (re-frame/subscribe [:tags/tag [:tags/tag (keyword (:ui.add-action/tag t))]])]
               {:style {:margin-top 20
@@ -97,7 +99,8 @@
      [add-action-app-bar]
      [ui/paper {:z-depth 2
                 :style {:padding 10
-                        :overflow "hidden"}}
+                        :overflow "hidden"
+                        :margin-bottom 20}}
       [ui/text-field {:floating-label-text "Action Name"
                       :value (:ui.add-action/action-name @add-action)
                       :on-change #(re-frame/dispatch [:ui.add-action/update-name (target-value %)])
