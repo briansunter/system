@@ -12,8 +12,8 @@
   {"" :actions
    "/" {"" :actions
         "add" :add-action
-        [:action-id ""] :view-action
-        [:action-id "/"] :view-action
+        [:nav/action-id ""] :view-action
+        [:nav/action-id "/"] :view-action
         true :not-found}
    true :not-found})
 
@@ -42,7 +42,7 @@
 
 (defn parse-route-params
   [params]
-  (update params :action-id js/parseInt))
+  (update params :nav/action-id js/parseInt))
 
 (defn set-page!
   [match]

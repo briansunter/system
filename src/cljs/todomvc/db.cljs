@@ -5,7 +5,7 @@
 
 (def schema {:db/ident {:db/unique :db.unique/identity}
              :tags/tag {:db/unique :db.unique/identity}
-             ;; :tags.template/type {:db/unique :db.unique/identity}
+             :tags.template/type {:db/unique :db.unique/identity}
              :ui.add-action/tag {:db/unique :db.unique/identity}
              :nav/drawer-open?    {:db/ident :nav/drawer-open?
                                    :db/unique :db.unique/identity
@@ -22,7 +22,7 @@
                                   :db/valueType :db.type/ref
                                   :db/cardinality :db.cardinality/many}
 
-             :action-id          {:db/ident :action-id
+             :nav/action-id          {:db/ident :nav/action-id
                                   :db/unique :db.unique/identity
                                   :db/valueType :db.type/ref
                                   :db/cardinality :db.cardinality/one}
@@ -34,9 +34,7 @@
 
              :tags/template-types {:db/isComponent true
                                    :db/valueType :db.type/ref
-                                   :db/cardinality :db.cardinality/many}
-
-             })
+                                   :db/cardinality :db.cardinality/many}})
 
 (def initial-db [
                  {:db/ident :nav/current-page :nav/page :nav.page/home}
@@ -180,12 +178,12 @@
 ;;    :where [_ :tags/tag ?n] ] @conn)
 
 #_(d/q '[:find ?n ?a
-       :where [_ :tags.template/name ?n]
-       [_ :tags.template/type ?a]
-       ] @conn)
+         :where [_ :tags.template/name ?n]
+         [_ :tags.template/type ?a]
+         ] @conn)
 
 #_(d/q '[:find [?n ...]
-   :where [_ :tags.template/type ?n]] @conn)
+         :where [_ :tags.template/type ?n]] @conn)
 
 ;; (d/q
 ;; '[:find [?name ?type]
@@ -195,3 +193,7 @@
 ;;   [?a :db/ident :nav/current-page]
 ;;   [?a :nav/route-params ?b]
 ;;   [?b :tag ?tag]] @conn)
+
+#_(d/q
+   '[:find ?n
+     :where [?n :action-id _]] @conn)

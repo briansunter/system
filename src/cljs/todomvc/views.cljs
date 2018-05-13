@@ -22,7 +22,7 @@
        [:div
         {:style {:flex-grow 3}}
         [ui/list-item {:class-name "task-list-item"
-                       :href (path-for-page :view-action :action-id id)}
+                       :href (path-for-page :view-action :nav/action-id id)}
          [:span (:action/name @task)]]]
        #_[ui/raised-button {:primary true
                             :label "done"

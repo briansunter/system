@@ -43,7 +43,7 @@
    :where
    [?a :db/ident :nav/current-page]
    [?a :nav/route-params ?b]
-   [?b :action-id ?c]])
+   [?b :nav/action-id ?c]])
 
 (re-posh/reg-query-sub
  :ui.view-action/current-tag
