@@ -7,7 +7,7 @@
 (re-posh/reg-query-sub
  :task-ids
  '[ :find  [?tid ...]
-   :where [?tid :app/type :type/task] ])
+   :where [?tid :app/type :app.type/action] ])
 
 (re-posh/reg-pull-sub
  :task
