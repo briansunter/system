@@ -58,7 +58,7 @@
    [[:db.fn/retractEntity tag-id]]))
 
 (re-posh/reg-event-ds
- :set-nav-drawer
+ :nav/set-drawer-open
  (fn [_ [_ is-open?]]
    [{:db/ident :nav/drawer-open? :nav/is-drawer-open? is-open?}]))
 

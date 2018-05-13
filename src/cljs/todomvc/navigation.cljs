@@ -13,58 +13,29 @@
 (defn main-app-drawer
   []
   (let [app-drawer-open (re-frame/subscribe [:nav/drawer-open?])]
-    (fn [] [ui/drawer {:open @app-drawer-open
-                 :docked false
-                 :z-depth 2
-                 :on-request-change #(re-frame/dispatch [:set-nav-drawer boolean %])}
-      [ui/menu
-       [ui/divider]
-       [ui/menu-item {:primary-text "Inbox"
-                      :href (path-for-page :actions)
-                      :left-icon (ic/action-list)}]
-       [ui/divider]
-       [ui/menu-item {:primary-text "Tags"
-                      :href (path-for-page :tags)
-                      :left-icon (ic/action-loyalty)}]
-       [ui/divider]
-       [ui/menu-item {:primary-text "Views"
-                      :href (path-for-page :decks)
-                      :left-icon (ic/action-pageview)}]
-       [ui/divider]]])))
+    [ui/drawer {:open @app-drawer-open
+                :docked false
+                :z-depth 2
+                :on-request-change #(re-frame/dispatch [:nav/set-drawer-open boolean %])}
+     [ui/menu
+      [ui/divider]
+      [ui/menu-item {:primary-text "Inbox"
+                     :href (path-for-page :actions)
+                     :left-icon (ic/action-list)}]
+      [ui/divider]
+      [ui/menu-item {:primary-text "Tags"
+                     :href (path-for-page :tags)
+                     :left-icon (ic/action-loyalty)}]
+      [ui/divider]
+      [ui/menu-item {:primary-text "Views"
+                     :href (path-for-page :decks)
+                     :left-icon (ic/action-pageview)}]
+      [ui/divider]]]))
 
 (defn toggle-app-drawer-button
   []
-  [ui/icon-button {:on-click #(re-frame/dispatch [:set-nav-drawer true])}
+  [ui/icon-button {:on-click #(re-frame/dispatch [:nav/set-drawer-open true])}
    [ic/navigation-menu {:style {:color "white"}}]])
-
-
-
-(defn add-card-button
-  []
-  (let [enabled (re-frame/subscribe [:add-card-button-enabled])
-        add-card-front-text (re-frame/subscribe [:add-card-front-text])
-        add-card-back-text (re-frame/subscribe [:add-card-back-text])]
-    [ui/flat-button {:label "save"
-                     :on-click #(re-frame/dispatch [:add-card/create-card @add-card-front-text @add-card-back-text])
-                     :disabled (not @enabled)
-                     :style {:color "white"
-                             :margin-top 5}}]))
-
-(defn app-bar-close-button
-  [props]
-  [ui/icon-button props [ic/navigation-close {:style {:fill "white"}}]])
-
-(defn app-bar-menu-button
-  []
-  [ui/icon-button {:on-click #(re-frame/dispatch [:set-nav-drawer true])}
-   [ic/navigation-menu {:style {:fill "white"}}]])
-
-(defn left-app-bar-button-for-page
-  [page]
-  (case page
-    :add-deck
-    :add-card [app-bar-close-button {:href (path-for-page :cards)}]
-    [app-bar-menu-button]))
 
 (s/def ::title string?)
 (s/def ::elem-type #{:div :a :href })
@@ -98,12 +69,12 @@
   [:div
    [main-app-drawer]
    [ui/app-bar {:title (::title props)
-                  :z-depth 2
-                  :icon-element-left (r/as-element (or (::left-element props) [toggle-app-drawer-button]))
-                  :icon-element-right (r/as-element (::right-element props))
-                  :style {:position "fixed"
-                          :top 0
-                          :left 0}}]])
+                :z-depth 2
+                :icon-element-left (r/as-element (or (::left-element props) [toggle-app-drawer-button]))
+                :icon-element-right (r/as-element (::right-element props))
+                :style {:position "fixed"
+                        :top 0
+                        :left 0}}]])
 
 
 (defn theme
