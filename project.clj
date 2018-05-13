@@ -52,8 +52,8 @@
      :figwheel     {:on-jsload "todomvc.core/mount-root"}
      :compiler     {:main                 todomvc.core
                     :output-to            "resources/public/js/compiled/app.js"
-                    :output-dir           "resources/public/js/compiled/out"
-                    :asset-path           "js/compiled/out"
+                    :output-dir           "resources/public/js/compiled/out/"
+                    :asset-path           "/js/compiled/out"
                     :source-map-timestamp true
                     :preloads             [devtools.preload re-frisk.preload]
                     :external-config      {:devtools/config {:features-to-install :all}}}}
@@ -62,6 +62,6 @@
      :source-paths ["src/cljs"]
      :compiler     {:main            todomvc.core
                     :output-to       "resources/public/js/compiled/app.js"
-                    :optimizations   :advanced
+                    :optimizations   :simple
                     :closure-defines {goog.DEBUG false}
                     :pretty-print    false}}]})

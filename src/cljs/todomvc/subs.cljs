@@ -2,12 +2,20 @@
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :as re-frame]
             [datascript.core    :as d]
-            [re-posh.core :as re-posh]))
+            [re-posh.core :as re-posh]
+            [todomvc.utils :as utils]))
 
 (re-posh/reg-query-sub
  :task-ids
  '[ :find  [?tid ...]
-   :where [?tid :app/type :app.type/action] ])
+   :where [?tid :app/type :app.type/action]
+   ])
+
+(utils/reg-pull-sub
+ :action/all-actions
+  '[ :find  [?n ...]
+    :where [?n :app/type :app.type/action]
+    ] '[*])
 
 (re-posh/reg-pull-sub
  :task
